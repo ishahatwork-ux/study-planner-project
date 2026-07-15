@@ -36,6 +36,15 @@ app.use('/api/ai',        require('./routes/ai'))
 // Health check
 app.get('/', (req, res) => res.json({ message: 'StudySyncAI API is running!' }))
 
+// Debug Env check
+app.get('/api/debug-env', (req, res) => {
+  res.json({
+    mongo_uri_loaded: !!process.env.MONGO_URI,
+    jwt_secret_loaded: !!process.env.JWT_SECRET,
+    node_env: process.env.NODE_ENV
+  })
+})
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
