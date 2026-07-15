@@ -45,6 +45,25 @@ app.get('/api/debug-env', (req, res) => {
   })
 })
 
+// Direct DB connection test from Vercel
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    // Force a new connection with a short timeout to see the exact error
+    await mongoose.createConnection(process.env.MONGO_URI, { 
+      serverSelectionTimeoutMS: 5000 
+    }).asPromise();
+    res.json({ success: true, message: "Connected successfully!" });
+  } catch (error) {
+    res.json({ 
+      success: false, 
+      error_name: error.name,
+      error_message: error.message,
+      error_code: error.code
+    });
+  }
+})
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
