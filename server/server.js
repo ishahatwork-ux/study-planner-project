@@ -65,13 +65,16 @@ app.get('/api/test-db', async (req, res) => {
 })
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('✅ MongoDB connected')
-  })
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err.message)
-  })
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 10000,
+  bufferCommands: false
+})
+.then(() => {
+  console.log('✅ MongoDB connected')
+})
+.catch(err => {
+  console.error('❌ MongoDB connection error:', err)
+})
 
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000

@@ -4,10 +4,11 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const auth = require('../middleware/auth')
-
+const mongoose = require('mongoose')
 // Register
 router.post('/register', async (req, res) => {
   try {
+    console.log("Mongoose readyState:", mongoose.connection.readyState)
     const { name, email, password } = req.body
     let user = await User.findOne({ email })
     if (user) return res.status(400).json({ message: 'User already exists' })
